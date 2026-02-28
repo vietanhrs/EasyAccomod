@@ -29,8 +29,6 @@ extendRequests = require('./extendRequest.model')(sequelize, DataTypes)
 posts.belongsTo(rooms, { foreignKey: 'roomID' })
 extendRequests.belongsTo(posts, { foreignKey: 'postID' })
 accounts.belongsTo(users, { foreignKey: 'userIdCard' }) // 1 người dùng chỉ có 1 tài khoản duy nhất
-// userFavorites.belongsTo(accounts, {foreignKey: 'username'})
-// userFavorites.belongsTo(posts, {foreignKey: 'postID'})
 
 // Liêt kết 1 - n
 accounts.hasMany(posts) // 1 tài khoản chủ trọ có nhiều bài đăng
@@ -39,7 +37,6 @@ accounts.hasMany(notifications)
 
 accounts.hasMany(comments)
 posts.hasMany(comments)
-//accounts.hasMany(userFavorites) // 
 posts.belongsToMany(accounts, { through: userFavorites})
 accounts.belongsToMany(posts, { through: userFavorites})
 

@@ -77,5 +77,3 @@ exports.getNumberOfPostsInTimeRange = async (req, res) => {
 
     res.send(result)
 }
-
-// exports.getDistrictHas

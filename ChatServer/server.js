@@ -18,8 +18,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
-// const db = require("./models");
-// db.Messages.sync({force: true});
 require("./routes/message.routes")(app);
 
 const connectedUser = {}
@@ -30,7 +28,6 @@ io.on('connection', (socket) => {
     })
 
     socket.on('disconnect', () => {
-        console.log('user disconnected')
     })
 
     socket.on('chat message', (msg) => {
