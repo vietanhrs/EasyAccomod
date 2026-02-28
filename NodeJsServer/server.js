@@ -2,13 +2,17 @@ require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const helmet = require("helmet");
 
 global.__basedir = __dirname;
 
 const app = express();
 
+app.use(helmet());
+
 var corsOptions = {
-    origin: "http://localhost:4200",
+    origin: process.env.CORS_ORIGIN || "http://localhost:4200",
+    credentials: true,
 };
 
 app.use(cors(corsOptions));
