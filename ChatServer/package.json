@@ -13,6 +13,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.17.1",
+    "helmet": "^8.1.0",
     "mysql2": "^3.18.2",
     "sequelize": "^6.8.0",
     "socket.io": "^4.8.3"

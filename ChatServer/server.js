@@ -1,10 +1,11 @@
 require('dotenv').config();
 const app = require('express')()
 const bodyParser = require("body-parser");
+const helmet = require("helmet");
 const http = require('http').createServer(app)
 const io = require('socket.io')(http, {
     cors: {
-        origin: "http://localhost:4200",
+        origin: process.env.CORS_ORIGIN || "http://localhost:4200",
         methods: ["GET", "POST"]
     }
 });
@@ -12,9 +13,10 @@ const io = require('socket.io')(http, {
 const cors = require("cors");
 
 const corsOptions = {
-    origin: "http://localhost:4200",
+    origin: process.env.CORS_ORIGIN || "http://localhost:4200",
 };
 
+app.use(helmet());
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
