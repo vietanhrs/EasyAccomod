@@ -42,7 +42,7 @@ module.exports = app => {
         }
     })
 
-    upload = multer({ storage, preservePath: true })
+    upload = multer({ storage })
 
     router.post('/:id/image', authJwt.verifyToken, upload.array(), room.addRoomImage)
 

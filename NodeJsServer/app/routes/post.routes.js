@@ -60,7 +60,7 @@ module.exports = app => {
         next()
     }
 
-    upload = multer({ storage, preservePath: true })
+    upload = multer({ storage })
 
     // Create new post with corresponding roomID
     router.post("/", authJwt.verifyToken, getNextRoomID, upload.any(), post.create)
