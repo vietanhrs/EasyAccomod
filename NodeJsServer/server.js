@@ -41,7 +41,10 @@ app.get("/api/csrf-token", (req, res) => {
     res.json({ csrfToken: generateCsrfToken(req, res) });
 });
 
-app.use(doubleCsrfProtection);
+// Skip CSRF enforcement in test mode
+if (process.env.NODE_ENV !== "test") {
+    app.use(doubleCsrfProtection);
+}
 
 // simple route
 app.get("/", (req, res) => {
@@ -59,8 +62,12 @@ require("./app/routes/statistic.routes")(app);
 require("./app/routes/notification.routes") (app);
 require("./app/routes/extendRequest.routes") (app);
 
-// set port, listen for requests
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`);
-});
+// Export app for testing; only start listening when run directly
+module.exports = app;
+
+if (require.main === module) {
+    const PORT = process.env.PORT || 8080;
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}.`);
+    });
+}

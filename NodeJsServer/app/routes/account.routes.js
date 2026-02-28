@@ -4,7 +4,10 @@ const rateLimit = require('express-rate-limit')
 const validate = require('../middleware/validate')
 const accountValidators = require('../middleware/validators/account.validators')
 
-const loginLimiter = rateLimit({
+const isTest = process.env.NODE_ENV === 'test';
+const passthrough = (req, res, next) => next();
+
+const loginLimiter = isTest ? passthrough : rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
   message: { message: 'Too many login attempts, please try again in 15 minutes' },
@@ -12,7 +15,7 @@ const loginLimiter = rateLimit({
   legacyHeaders: false,
 })
 
-const signupLimiter = rateLimit({
+const signupLimiter = isTest ? passthrough : rateLimit({
   windowMs: 60 * 60 * 1000,
   max: 5,
   message: { message: 'Too many accounts created from this IP, please try again later' },
