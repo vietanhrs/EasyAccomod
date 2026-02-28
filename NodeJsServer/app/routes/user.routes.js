@@ -1,5 +1,6 @@
 module.exports = app => {
   const users = require("../controllers/user.controller.js");
+  const authJwt = require("../middleware/authJwt");
 
   var router = require("express").Router();
 
@@ -10,10 +11,10 @@ module.exports = app => {
   router.get("/", users.findAll);
 
   //Update/edit an user with id
-  router.put("/:id", users.edit);
+  router.put("/:id", authJwt.verifyToken, users.edit);
 
   //Delete an user with id
-  router.delete("/:id", users.delete);
+  router.delete("/:id", authJwt.verifyToken, users.delete);
 
   app.use('/api/users', router);
 };

@@ -1,4 +1,5 @@
 const multer = require('multer')
+const authJwt = require('../middleware/authJwt')
 
 module.exports = app => {
   const accounts = require("../controllers/account.controller.js");
@@ -13,12 +14,9 @@ module.exports = app => {
 
   // Login account
   router.post("/login", upload.none(), auth.signIn)
-  
+
   //Retrieve all accounts
   router.get("/", accounts.findAll);
-
-  //Retrieve an account by username
-  router.get("/username/:username", accounts.findOne);
 
   //Retrieve an account by username
   router.get("/username/:username", accounts.findByUsername);
@@ -27,10 +25,10 @@ module.exports = app => {
   router.get("/type/:type", accounts.findByType);
 
   //Delete an account by username
-  router.delete("/:username", accounts.delete);
+  router.delete("/:username", authJwt.verifyToken, accounts.delete);
 
   //Update/Edit an account by username
-  router.put("/:username", accounts.edit);
+  router.put("/:username", authJwt.verifyToken, accounts.edit);
 
   // Retrieve account info by username
   router.get("/info/:username", accounts.getUserInfo)

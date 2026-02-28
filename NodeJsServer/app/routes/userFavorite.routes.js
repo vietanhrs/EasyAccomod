@@ -1,5 +1,6 @@
 module.exports = app => {
     const userFavorites = require("../controllers/userFavorite.controller");
+    const authJwt = require("../middleware/authJwt");
 
     var router = require("express").Router();
 
@@ -9,9 +10,9 @@ module.exports = app => {
 
     router.get('/like/:username/:id', userFavorites.checkUserFavorite)
 
-    router.post('/', userFavorites.createFavorite)
+    router.post('/', authJwt.verifyToken, userFavorites.createFavorite)
 
-    router.delete('/:username/:id', userFavorites.deleteFavorite)
+    router.delete('/:username/:id', authJwt.verifyToken, userFavorites.deleteFavorite)
 
     app.use('/api/userfavorites', router);
 };
