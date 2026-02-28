@@ -25,6 +25,7 @@ import { MainNavComponent } from './main-nav/main-nav.component';
 import { ExtendDurationComponent } from './admin/extend-duration/extend-duration.component';
 
 import { JwtInterceptor } from './_helpers/jwt.interceptor';
+import { CsrfInterceptor } from './_helpers/csrf.interceptor';
 import { VerifyCommentsComponent } from './admin/verify/comments/verify-comments.component';
 import { CommentsComponent } from './comments/comments.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -80,6 +81,7 @@ import { EditPostComponent } from './edit-post/edit-post.component';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: CsrfInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

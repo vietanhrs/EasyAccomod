@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const helmet = require("helmet");
+const { doubleCsrf } = require("csrf-csrf");
 
 global.__basedir = __dirname;
 
@@ -24,6 +25,23 @@ app.use(bodyParser.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const { generateCsrfToken, doubleCsrfProtection } = doubleCsrf({
+    getSecret: () => process.env.JWT_SECRET || "csrf-secret",
+    cookieName: "x-csrf-token",
+    cookieOptions: {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production",
+    },
+});
+
+// Expose CSRF token to the client; must come before doubleCsrfProtection
+app.get("/api/csrf-token", (req, res) => {
+    res.json({ csrfToken: generateCsrfToken(req, res) });
+});
+
+app.use(doubleCsrfProtection);
 
 // simple route
 app.get("/", (req, res) => {
