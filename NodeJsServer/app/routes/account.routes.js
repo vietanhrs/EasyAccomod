@@ -1,6 +1,8 @@
 const multer = require('multer')
 const authJwt = require('../middleware/authJwt')
 const rateLimit = require('express-rate-limit')
+const validate = require('../middleware/validate')
+const accountValidators = require('../middleware/validators/account.validators')
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -27,10 +29,10 @@ module.exports = app => {
   let upload = multer();
 
   //Create a new account
-  router.post("/", signupLimiter, upload.none(), accounts.create);
+  router.post("/", signupLimiter, upload.none(), accountValidators.createRules, validate, accounts.create);
 
   // Login account
-  router.post("/login", loginLimiter, upload.none(), auth.signIn)
+  router.post("/login", loginLimiter, upload.none(), accountValidators.loginRules, validate, auth.signIn)
 
   // Logout account
   router.post("/logout", auth.signOut)

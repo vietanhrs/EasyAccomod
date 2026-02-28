@@ -4,6 +4,8 @@ const path = require('path')
 const fs = require('fs')
 const authJwt = require('../middleware/authJwt')
 const { sequelize } = require('../models')
+const validate = require('../middleware/validate')
+const postValidators = require('../middleware/validators/post.validators')
 
 const isPositiveInteger = (value) => Number.isInteger(Number(value)) && Number(value) > 0
 
@@ -63,10 +65,10 @@ module.exports = app => {
     upload = multer({ storage })
 
     // Create new post with corresponding roomID
-    router.post("/", authJwt.verifyToken, getNextRoomID, upload.any(), post.create)
+    router.post("/", authJwt.verifyToken, getNextRoomID, upload.any(), postValidators.createRules, validate, post.create)
 
     // Update post and room info by submitting form
-    router.put("/form", authJwt.verifyToken, upload.any(), post.updatePostByForm)
+    router.put("/form", authJwt.verifyToken, upload.any(), postValidators.updateRules, validate, post.updatePostByForm)
 
     // Get preview posts by requirement for homepage
     router.get("/preview", post.getPreviewPosts)
