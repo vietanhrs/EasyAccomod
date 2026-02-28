@@ -1,3 +1,7 @@
+if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET environment variable is not set");
+}
+
 module.exports = {
-    secret: "easyaccomod-secret-key"
+    secret: process.env.JWT_SECRET
 };

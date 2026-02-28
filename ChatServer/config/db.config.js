@@ -1,8 +1,8 @@
 module.exports = {
-    HOST: "localhost",
-    USER: "root",
-    PASSWORD: "123456",
-    DB: "easyaccomod",
+    HOST: process.env.DB_HOST || "localhost",
+    USER: process.env.DB_USER || "root",
+    PASSWORD: process.env.DB_PASSWORD || "",
+    DB: process.env.DB_NAME || "easyaccomod",
     dialect: "mysql",
     pool: {
         max: 5,
