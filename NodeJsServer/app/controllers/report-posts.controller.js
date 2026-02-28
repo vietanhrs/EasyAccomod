@@ -28,7 +28,7 @@ exports.getReport = async (req, res) => {
 
         res.status(200).send(result)
     } catch (err) {
-        res.status(500).send({ error: err })
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }
 
@@ -44,6 +44,6 @@ exports.deleteReport = async (req, res) => {
             res.send({ message: 'Deleted' })
         }
     } catch (err) {
-        res.status(500).send({ error: err })
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }

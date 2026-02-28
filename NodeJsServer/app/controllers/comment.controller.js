@@ -19,7 +19,7 @@ exports.addComment = async (req, res) => {
         res.send(result)
 
     } catch (err) {
-        res.send({ error: err })
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }
 
@@ -36,7 +36,7 @@ exports.getComments = async (req, res) => {
 
         res.send(result)
     } catch (err) {
-        res.send({ message: err })
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }
 
@@ -56,7 +56,7 @@ exports.updateComment = async (req, res) => {
             res.status(400).send({ message: 'No comment exists with given id' })
         }
     } catch (err) {
-        res.send({ error: err })
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }
 
@@ -72,6 +72,6 @@ exports.deleteComment = async (req, res) => {
 
         res.send({ message: result + ' comments deleted'})
     } catch (err) {
-        res.send({error: err})
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }

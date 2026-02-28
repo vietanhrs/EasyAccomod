@@ -18,7 +18,7 @@ exports.updateRoomInfo = async (req, res) => {
             res.send({ message: `Updated room with ${roomID} successfully` })
         }
     } catch (err) {
-        res.send(err)
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }
 
@@ -43,7 +43,7 @@ exports.getRoomImagesByID = async (req, res) => {
 
         res.send(roomImagesDir)
     } catch (err) {
-        res.send({ message: err })
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }
 
@@ -72,7 +72,7 @@ exports.getImageByName = async (req, res) => {
         }
 
     } catch (err) {
-        res.send({ message: err })
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }
 
@@ -100,7 +100,7 @@ exports.deleteByID = async (req, res) => {
 
         res.send(`Deleted room with id = ${_id}`)
     } catch (err) {
-        res.send("can't deleted room")
+        res.status(500).send({ message: 'Could not delete room' })
     }
 }
 
@@ -136,7 +136,7 @@ exports.deleteRoomImageByFileName = async (req, res) => {
             res.send({ message: "File doesn't exist" })
         }
     } catch (err) {
-        res.send({ error: "Internal server error" })
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }
 
@@ -251,6 +251,6 @@ exports.findByQuery = async (req, res) => {
         res.send(result)
 
     } catch (err) {
-        res.send({ error: err })
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }

@@ -65,7 +65,7 @@ exports.create = async (req, res) => {
 
         res.status(201).send({ message: 'Success' })
     } catch (err) {
-        res.status(500).send({ error: err })
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }
 
@@ -90,7 +90,7 @@ exports.getPostInfoByID = async (req, res) => {
 
         res.send(post)
     } catch (err) {
-        res.send(err)
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }
 
@@ -129,7 +129,7 @@ exports.findByQuery = async (req, res) => {
         })
         res.send(result)
     } catch (err) {
-        res.send({ error: "Can't find post with given queries" })
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }
 
@@ -143,7 +143,7 @@ exports.deleteByQuery = async (req, res) => {
 
         res.send('Posts deleted: ' + deletedPosts)
     } catch (err) {
-        res.send(err)
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }
 
@@ -161,7 +161,7 @@ exports.updatePostByID = async (req, res) => {
             res.send({ message: 'Updated post successfully' })
         }
     } catch (err) {
-        res.send(err)
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }
 
@@ -220,6 +220,6 @@ exports.updatePostByForm = async (req, res) => {
 
         res.send({ message: 'Updated post successfully' })
     } catch (err) {
-        res.send({ error: "Can't update post" })
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }

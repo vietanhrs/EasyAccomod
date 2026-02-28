@@ -9,11 +9,15 @@ exports.getPostsOrderByColumn = async (req, res) => {
     if (!ALLOWED_COLUMNS.includes(columnName)) {
         return res.status(400).send({ message: 'Invalid sort column' })
     }
-    const results = await sequelize.query(
-        `SELECT * FROM posts WHERE verifiedStatus = 1 AND paymentStatus = 1 ORDER BY ${columnName} DESC`,
-        { type: QueryTypes.SELECT }
-    )
-    res.send(results)
+    try {
+        const results = await sequelize.query(
+            `SELECT * FROM posts WHERE verifiedStatus = 1 AND paymentStatus = 1 ORDER BY ${columnName} DESC`,
+            { type: QueryTypes.SELECT }
+        )
+        res.send(results)
+    } catch (err) {
+        res.status(500).send({ message: err.message || 'Internal server error' })
+    }
 }
 
 exports.getPostsOrderByColumnInMonthAndYear = async (req, res) => {
@@ -32,15 +36,20 @@ exports.getPostsOrderByColumnInMonthAndYear = async (req, res) => {
         return res.status(400).send({ message: 'Invalid year' })
     }
 
-    const results = await sequelize.query(
-        `SELECT * FROM posts WHERE month(postTime) = :month AND year(postTime) = :year AND verifiedStatus = 1 AND paymentStatus = 1 ORDER BY ${column} DESC`,
-        { replacements: { month, year }, type: QueryTypes.SELECT }
-    )
-    res.send(results)
+    try {
+        const results = await sequelize.query(
+            `SELECT * FROM posts WHERE month(postTime) = :month AND year(postTime) = :year AND verifiedStatus = 1 AND paymentStatus = 1 ORDER BY ${column} DESC`,
+            { replacements: { month, year }, type: QueryTypes.SELECT }
+        )
+        res.send(results)
+    } catch (err) {
+        res.status(500).send({ message: err.message || 'Internal server error' })
+    }
 }
 
 exports.getNumberOfPostsInTimeRange = async (req, res) => {
-    const result = await sequelize.query(`
+    try {
+        const result = await sequelize.query(`
     SELECT count(postID) as numberOfPosts,
     CASE
         WHEN hour(postTime) BETWEEN 0 and 1 THEN '12:00 AM - 2:00 AM'
@@ -73,7 +82,9 @@ exports.getNumberOfPostsInTimeRange = async (req, res) => {
     GROUP BY intervals
     ORDER BY numberOfPosts DESC
     LIMIT 1
-    `, { type: QueryTypes.SELECT })
-
-    res.send(result)
+        `, { type: QueryTypes.SELECT })
+        res.send(result)
+    } catch (err) {
+        res.status(500).send({ message: err.message || 'Internal server error' })
+    }
 }
