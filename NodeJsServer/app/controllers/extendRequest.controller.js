@@ -11,8 +11,6 @@ exports.createRequest = (req, res) => {
       return;
     }
 
-    console.log(req.body.newExpireTime)
-  
     // Create a notification
     const extendRequest = {
       postID: req.body.postID,
@@ -69,7 +67,7 @@ exports.delete = (req, res) => {
     const id = req.params.id;
     
     ExtendRequest.destroy({
-        where: { postId: id }
+        where: { postID: id }
     })
     .then(num => {
         if (num == 1) {
