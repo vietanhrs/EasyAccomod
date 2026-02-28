@@ -137,7 +137,7 @@ exports.deleteByQuery = async (req, res) => {
     const conditions = req.query
 
     try {
-        let deletedPosts = Post.destroy({
+        let deletedPosts = await Post.destroy({
             where: conditions
         })
 
@@ -168,8 +168,6 @@ exports.updatePostByID = async (req, res) => {
 exports.updatePostByForm = async (req, res) => {
     try {
         const formData = req.body // các thông tin trong http body
-        console.log(formData)
-
         const sharedOwner = formData.sharedOwner === 'Có' ? true : false;
         const airconditioner = formData.airconditioner === 'on' ? true : false;
         const balcony = formData.balcony === 'on' ? true : false;
@@ -203,6 +201,8 @@ exports.updatePostByForm = async (req, res) => {
                 roomID: formData.roomID
             }
         })
+
+        const costs = (await PostCost.findAll())[0].dataValues
 
         const post = {
             postName: formData.postName,
