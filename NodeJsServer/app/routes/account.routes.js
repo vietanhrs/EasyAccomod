@@ -1,5 +1,22 @@
 const multer = require('multer')
 const authJwt = require('../middleware/authJwt')
+const rateLimit = require('express-rate-limit')
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { message: 'Too many login attempts, please try again in 15 minutes' },
+  standardHeaders: true,
+  legacyHeaders: false,
+})
+
+const signupLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  message: { message: 'Too many accounts created from this IP, please try again later' },
+  standardHeaders: true,
+  legacyHeaders: false,
+})
 
 module.exports = app => {
   const accounts = require("../controllers/account.controller.js");
@@ -10,10 +27,10 @@ module.exports = app => {
   let upload = multer();
 
   //Create a new account
-  router.post("/", upload.none(), accounts.create);
+  router.post("/", signupLimiter, upload.none(), accounts.create);
 
   // Login account
-  router.post("/login", upload.none(), auth.signIn)
+  router.post("/login", loginLimiter, upload.none(), auth.signIn)
 
   //Retrieve all accounts
   router.get("/", accounts.findAll);
