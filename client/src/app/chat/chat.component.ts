@@ -3,8 +3,9 @@ import { io } from 'socket.io-client'
 import { AuthService } from '../services/auth.service'
 import { MessageService } from '../services/messages.service';
 import { AccountService } from '../services/account.service'
+import { environment } from '../../environments/environment'
 
-const SOCKET_ENDPOINT = 'http://localhost:3000'
+const SOCKET_ENDPOINT = environment.chatApiUrl
 
 @Component({
   selector: 'app-chat',
