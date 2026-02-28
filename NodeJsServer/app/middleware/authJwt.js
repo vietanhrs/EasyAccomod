@@ -4,23 +4,27 @@ const db = require('../models')
 const Account = db.accounts
 
 verifyToken = async (req, res, next) => {
-    try {
-        let token = req.header('Authorization').replace('Bearer ', '')
+    const authHeader = req.header('Authorization')
+    if (!authHeader) {
+        return res.status(401).send({ message: 'Access denied: no token provided' })
+    }
 
+    try {
+        const token = authHeader.replace('Bearer ', '')
         const decoded = jwt.verify(token, authConfig.secret)
 
-        let account = await Account.findAll({
-            where: {
-                username: decoded.username
-            }
+        const account = await Account.findAll({
+            where: { username: decoded.username }
         })
 
-        if (account) {
-            req.username = decoded.username
+        if (!account || account.length === 0) {
+            return res.status(401).send({ message: 'Access denied: account not found' })
         }
+
+        req.username = decoded.username
         next()
     } catch (err) {
-        res.send('Invalid token')
+        return res.status(401).send({ message: 'Access denied: invalid token' })
     }
 }
 
