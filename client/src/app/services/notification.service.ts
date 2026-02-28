@@ -11,11 +11,11 @@ export class NotificationService {
 
   constructor(private http: HttpClient) { }
 
-  getUserNotification(username) {
+  getUserNotification(username: string) {
     return this.http.get(`${baseUrl}/${username}`);
   }
 
-  createNotification(data) {
+  createNotification(data: object) {
     return this.http.post(baseUrl, data);
   }
 }

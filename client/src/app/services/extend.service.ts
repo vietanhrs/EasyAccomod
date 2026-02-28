@@ -11,7 +11,7 @@ export class ExtendService {
 
   constructor(private http: HttpClient) { }
 
-  createRequest(data) {
+  createRequest(data: object) {
     return this.http.post(baseUrl, data);
   }
 
@@ -19,11 +19,11 @@ export class ExtendService {
     return this.http.get(`${baseUrl}/`);
   }
 
-  getOneRequest(postID) {
+  getOneRequest(postID: number) {
     return this.http.get(`${baseUrl}/${postID}`);
   }
 
-  deleteRequest(postID) {
+  deleteRequest(postID: number) {
     return this.http.delete(`${baseUrl}/${postID}`);
   }
 }

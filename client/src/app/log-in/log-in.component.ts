@@ -43,9 +43,10 @@ export class LogInComponent implements OnInit {
 
   loginMessage: string
   signIn() {
-    var form = document.querySelector('form')
+    const form = document.querySelector('form') as HTMLFormElement
+    if (!form) return
 
-    var formData = new FormData(form)
+    const formData = new FormData(form)
 
     this.authService.signIn(formData).pipe(catchError(err => {
       this.loginMessage = err.error.message

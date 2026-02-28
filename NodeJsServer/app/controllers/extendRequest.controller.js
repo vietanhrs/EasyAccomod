@@ -70,7 +70,7 @@ exports.delete = (req, res) => {
         where: { postID: id }
     })
     .then(num => {
-        if (num == 1) {
+        if (num === 1) {
             res.send({
                 message: "Request was deleted successfully!"
             });

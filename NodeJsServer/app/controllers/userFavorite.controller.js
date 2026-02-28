@@ -65,7 +65,7 @@ exports.checkUserFavorite = (req, res) => {
 
   UserFavorite.findAndCountAll({ where: { PostPostID: searchPostID, accountUsername: searchUsername} })
     .then(data => {
-      if (data.count == 1)
+      if (data.count === 1)
         res.send({liked: true});
       else 
         res.send({liked: false});
@@ -90,7 +90,7 @@ exports.deleteFavorite = (req, res) => {
     where: { accountUsername: req.params.username, PostPostID: req.params.id }
   })
     .then(num => {
-      if (num == 1) {
+      if (num === 1) {
         res.send({
           message: "favorite was deleted successfully!"
         });

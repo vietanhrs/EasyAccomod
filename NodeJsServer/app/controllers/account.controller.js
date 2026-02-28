@@ -56,7 +56,7 @@ exports.create = async (req, res) => {
 	        res.status(201).send({ message: 'Signup successfully' })
 	    } catch (err) {
 	        res.status(500).send({
-	            error: err.message || "Some error occurred while creating the account."
+	            message: err.message || "Some error occurred while creating the account."
 	        });
 	    }
 	}
@@ -133,7 +133,7 @@ exports.delete = (req, res) => {
 		where: { id: id }
 	})
 		.then(num => {
-			if (num == 1) {
+			if (num === 1) {
 				res.send({
 					message: "Account was deleted successfully!"
 				});
@@ -162,7 +162,7 @@ exports.edit = (req, res) => {
 		where: { username }
 	})
 		.then(num => {
-			if (num == 1) {
+			if (num[0] === 1) {
 				res.send({
 					message: "account was updated successfully."
 				});

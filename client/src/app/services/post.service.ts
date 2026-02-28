@@ -24,7 +24,7 @@ export class PostService {
   }
 
   // Change post information
-  updatePost(postID: number, option) {
+  updatePost(postID: number, option: object) {
     return this.http.put(this.postUrl + `/${postID}`, option)
   }
 

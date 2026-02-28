@@ -14,7 +14,7 @@ exports.updateRoomInfo = async (req, res) => {
                 roomID
             }
         })
-        if (result == 1) {
+        if (result[0] === 1) {
             res.send({ message: `Updated room with ${roomID} successfully` })
         }
     } catch (err) {
