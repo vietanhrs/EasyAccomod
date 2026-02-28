@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
-const baseUrl = 'http://localhost:8080/api/notifications';
+const baseUrl = environment.apiUrl + '/api/notifications';
 
 @Injectable({
   providedIn: 'root'

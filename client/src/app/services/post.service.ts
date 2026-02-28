@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +10,9 @@ export class PostService {
 
   constructor(private http: HttpClient) { }
 
-  roomUrl = 'http://localhost:8080/api/rooms'
-  postUrl = 'http://localhost:8080/api/posts'
-  reportUrl = 'http://localhost:8080/api/report'
+  roomUrl = environment.apiUrl + '/api/rooms'
+  postUrl = environment.apiUrl + '/api/posts'
+  reportUrl = environment.apiUrl + '/api/report'
   // Upload form containg room and post data to server
   uploadForm(url: string, form: FormData) {
     return this.http.post(url, form)

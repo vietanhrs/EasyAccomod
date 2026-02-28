@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -7,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 export class MessageService {
     constructor(private http: HttpClient) { }
 
-    messageUrl = 'http://localhost:3000/api/message'
+    messageUrl = environment.chatApiUrl + '/api/message'
     sendMessage(sender: string, receiver: string, content: string) {
         return this.http.post(this.messageUrl, { sender, receiver, content })
     }
