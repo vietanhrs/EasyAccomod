@@ -5,6 +5,8 @@ const fs = require('fs')
 const authJwt = require('../middleware/authJwt')
 const { sequelize } = require('../models')
 
+const isPositiveInteger = (value) => Number.isInteger(Number(value)) && Number(value) > 0
+
 module.exports = app => {
     const post = require("../controllers/post.controller.js");
 
@@ -14,14 +16,18 @@ module.exports = app => {
 
     var storage = multer.diskStorage({
         destination: function (req, file, cb) {
-            // Tạo thư mục với tên là id của phòng trọ để lưu ảnh của phòng trọ
-            let savePath
-            if (req.roomID) {
-                // For creating new post
-                savePath = path.join(__dirname, `./../../roomImages/${req.roomID}`)
-            } else {
-                // For saving new image to existing room
-                savePath = path.join(__dirname, `./../../roomImages/${req.body.roomID}`)
+            let roomId = req.roomID || req.body.roomID
+
+            if (!isPositiveInteger(roomId)) {
+                return cb(new Error('Invalid room ID'))
+            }
+
+            // Resolve path and ensure it stays within roomImages directory
+            const baseDir = path.resolve(__dirname, './../../roomImages')
+            const savePath = path.resolve(baseDir, String(parseInt(roomId, 10)))
+
+            if (!savePath.startsWith(baseDir)) {
+                return cb(new Error('Invalid room ID: path traversal detected'))
             }
 
             if (!fs.existsSync(savePath)) {
@@ -60,7 +66,7 @@ module.exports = app => {
     router.post("/", authJwt.verifyToken, getNextRoomID, upload.any(), post.create)
 
     // Update post and room info by submitting form
-    router.put("/form", upload.any(), post.updatePostByForm)
+    router.put("/form", authJwt.verifyToken, upload.any(), post.updatePostByForm)
 
     // Get preview posts by requirement for homepage
     router.get("/preview", post.getPreviewPosts)
@@ -75,7 +81,7 @@ module.exports = app => {
     // find all if the req.query obj is empty
     router.get("/", post.findByQuery)
 
-    // Update post info with given postID 
+    // Update post info with given postID
     router.put("/:id", post.updatePostByID)
 
     // Delete posts with columns satisfy conditions in query string
