@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http'
 import { BehaviorSubject } from 'rxjs';
 import { Account } from '../_model/account'
 import { map } from 'rxjs/operators';
-import * as bcrypt from 'bcryptjs'
 import { AccountService } from '../services/account.service'
 
 @Injectable({
@@ -23,16 +22,6 @@ export class AuthService {
         return this.currentAccountSubject.value;
     }
 
-    hashPassword(form: FormData): FormData {
-        const salt: string = bcrypt.genSaltSync(10)
-
-        var hasedPsw = bcrypt.hashSync(form.get('password'), salt)
-
-        form.set('password', hasedPsw)
-
-        return form
-    }
-
     signIn(form: FormData) {
         return this.http.post<any>(this.apiUrl + '/login', form, { responseType: 'json' }).pipe(map(user => {
             // login successful if there's a jwt token in the response
@@ -40,7 +29,6 @@ export class AuthService {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('currentAccount', JSON.stringify(user));
                 this.currentAccountSubject.next(user);
-                console.log('Logged in')
             }
 
             return user;
@@ -48,10 +36,6 @@ export class AuthService {
     }
 
     signUp(form: FormData) {
-
-        // Hash password before sending to server
-        form = this.hashPassword(form)
-
         return this.http.post<any>(this.apiUrl, form, { responseType: 'json' })
             .pipe(map(user => {
                 // sign up successful if there's a jwt token in the response
@@ -79,22 +63,17 @@ export class AuthService {
         let result = 1;
 
         loginInfo.set('username', this.currentUserValue.username)
-        loginInfo.set('password', form.get('currentpwd'))
+        loginInfo.set('password', form.get('currentpwd') as string)
 
         // Try to login with current password, if current password is correct, change to new password
         this.signIn(loginInfo).subscribe(data => {
             if (data.token) {
-                const salt: string = bcrypt.genSaltSync(10)
-
-                var hasedPsw = bcrypt.hashSync(form.get('newpwd'), salt)
-                form.set('newpwd', hasedPsw)
-
                 this.accountService.updateAccount(
-                    this.currentUserValue.username, 
-                    { 
-                        password: form.get('newpwd') 
+                    this.currentUserValue.username,
+                    {
+                        password: form.get('newpwd')
                     }).
-                subscribe(data => { console.log("Changed") })
+                subscribe(data => { })
             }
             else {
                 return 2;
