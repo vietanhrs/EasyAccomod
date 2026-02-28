@@ -15,7 +15,7 @@ export class AuthService {
     private apiUrl = 'http://localhost:8080/api/accounts'
 
     constructor(private http: HttpClient, private accountService: AccountService) {
-        this.currentAccountSubject = new BehaviorSubject<Account>(JSON.parse(localStorage.getItem('currentAccount')));
+        this.currentAccountSubject = new BehaviorSubject<Account>(JSON.parse(localStorage.getItem('currentAccount') || 'null'));
     }
 
     public get currentUserValue(): Account {
