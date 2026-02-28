@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const helmet = require("helmet");
 
@@ -16,6 +17,7 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(cookieParser());
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());

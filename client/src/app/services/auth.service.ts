@@ -24,10 +24,8 @@ export class AuthService {
     }
 
     signIn(form: FormData) {
-        return this.http.post<any>(this.apiUrl + '/login', form, { responseType: 'json' }).pipe(map(user => {
-            // login successful if there's a jwt token in the response
-            if (user && user.token) {
-                // store user details and jwt token in local storage to keep user logged in between page refreshes
+        return this.http.post<any>(this.apiUrl + '/login', form, { responseType: 'json', withCredentials: true }).pipe(map(user => {
+            if (user && user.username) {
                 localStorage.setItem('currentAccount', JSON.stringify(user));
                 this.currentAccountSubject.next(user);
             }
@@ -37,11 +35,9 @@ export class AuthService {
     }
 
     signUp(form: FormData) {
-        return this.http.post<any>(this.apiUrl, form, { responseType: 'json' })
+        return this.http.post<any>(this.apiUrl, form, { responseType: 'json', withCredentials: true })
             .pipe(map(user => {
-                // sign up successful if there's a jwt token in the response
-                if (user && user.token) {
-                    // store user details and jwt token in local storage to keep user logged in between page refreshes
+                if (user && user.username) {
                     localStorage.setItem('currentAccount', JSON.stringify(user));
                     this.currentAccountSubject.next(user);
                 }
@@ -51,8 +47,8 @@ export class AuthService {
     }
 
     logout() {
-        // remove user from local storage to log user out
         this.accountService.updateAccount(this.currentUserValue.username, { online: false }).subscribe()
+        this.http.post(this.apiUrl + '/logout', {}, { withCredentials: true }).subscribe()
         localStorage.removeItem('currentAccount');
         this.currentAccountSubject.next(null);
         location.reload()
@@ -66,9 +62,8 @@ export class AuthService {
         loginInfo.set('username', this.currentUserValue.username)
         loginInfo.set('password', form.get('currentpwd') as string)
 
-        // Try to login with current password, if current password is correct, change to new password
         this.signIn(loginInfo).subscribe(data => {
-            if (data.token) {
+            if (data.username) {
                 this.accountService.updateAccount(
                     this.currentUserValue.username,
                     {

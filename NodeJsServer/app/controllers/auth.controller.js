@@ -27,10 +27,15 @@ exports.signIn = async (req, res) => {
                         expiresIn: "1d"
                     })
 
+                    res.cookie('token', token, {
+                        httpOnly: true,
+                        sameSite: 'strict',
+                        maxAge: 24 * 60 * 60 * 1000
+                    })
+
                     res.status(202).send({
                         username: account.username,
-                        accountType: account.accountType,
-                        token
+                        accountType: account.accountType
                     })
                 } else {
                     res.status(401).send({ message: 'Thông tin đăng nhập chưa đúng hoặc tài khoản đang chờ kiểm duyệt' })
@@ -42,7 +47,11 @@ exports.signIn = async (req, res) => {
             res.status(400).send({ message: 'Thông tin đăng nhập chưa đúng hoặc tài khoản đang chờ kiểm duyệt' })
         }
     } catch (err) {
-        res.status(500).send({ error: err })
+        res.status(500).send({ message: err.message || 'Internal server error' })
     }
 }
 
+exports.signOut = (req, res) => {
+    res.clearCookie('token', { httpOnly: true, sameSite: 'strict' })
+    res.status(200).send({ message: 'Logged out successfully' })
+}

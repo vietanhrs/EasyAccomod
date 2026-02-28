@@ -32,6 +32,9 @@ module.exports = app => {
   // Login account
   router.post("/login", loginLimiter, upload.none(), auth.signIn)
 
+  // Logout account
+  router.post("/logout", auth.signOut)
+
   //Retrieve all accounts
   router.get("/", accounts.findAll);
 

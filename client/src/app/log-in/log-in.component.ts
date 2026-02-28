@@ -60,7 +60,7 @@ export class LogInComponent implements OnInit {
       })
       return throwError(err);
     })).subscribe(data => {
-      if (data.token) {
+      if (data.username) {
         this.accountService.updateAccount(data.username, { online: true }).subscribe(data => this.router.navigate([this.returnUrl]))
       }
     })
