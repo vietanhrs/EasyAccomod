@@ -1,251 +1,197 @@
 # EasyAccomod
 
-## Contributor
-Tran Viet Anh
-Dinh Trong Hieu
-Pham Xuan Hanh
+A full-stack web application for finding and listing rental accommodations in Vietnam. Landlords can post room listings with photos, pricing, and amenities; renters can search, filter, favorite, comment, and chat with landlords directly.
 
-## Description
-Web development final project
+## Contributors
 
-## Project structure
+- Tran Viet Anh
+- Dinh Trong Hieu
+- Pham Xuan Hanh
+
+---
+
+## Features
+
+**For Renters**
+- Browse and search room listings by district, city, price range, and room type
+- View detailed room information including photos, utilities, and pricing (monthly / quarterly / yearly)
+- Save favorite listings
+- Leave star-rated reviews and comments on posts
+- Real-time chat with landlords
+- Receive notifications when posts are updated or verified
+
+**For Landlords**
+- Create and manage room listings with image uploads
+- Set different pricing tiers (weekly, monthly, quarterly, yearly)
+- Extend listing duration
+- View listing statistics
+
+**For Admins**
+- Verify and approve new landlord accounts
+- Moderate posts, comments, and user reports
+- View payment and extension request management
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | Angular 9, TypeScript, Angular Material |
+| Main API | Node.js, Express, Sequelize ORM |
+| Chat server | Node.js, Express, Socket.io 4 |
+| Database | MySQL |
+| Auth | JWT stored in httpOnly cookie |
+| File uploads | Multer (disk storage) |
+
+---
+
+## Prerequisites
+
+- Node.js 18+ and npm
+- MySQL 8+
+- (Optional) [Bun](https://bun.sh) for the Angular client
+
+---
+
+## Setup
+
+### 1. Database
+
+Create a MySQL database:
+
+```sql
+CREATE DATABASE easyaccomod CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+### 2. Main API server (NodeJsServer)
 
 ```bash
-.
-├── AngularClient
-│   ├── angular.json
-│   ├── browserslist
-│   ├── e2e
-│   │   ├── protractor.conf.js
-│   │   ├── src
-│   │   │   ├── app.e2e-spec.ts
-│   │   │   └── app.po.ts
-│   │   └── tsconfig.json
-│   ├── karma.conf.js
-│   ├── package.json
-│   ├── package-lock.json
-│   ├── README.md
-│   ├── src
-│   │   ├── app
-│   │   │   ├── admin
-│   │   │   │   ├── admin.component.css
-│   │   │   │   ├── admin.component.html
-│   │   │   │   ├── admin.component.spec.ts
-│   │   │   │   ├── admin.component.ts
-│   │   │   │   ├── extend-duration
-│   │   │   │   │   ├── extend-duration.component.css
-│   │   │   │   │   ├── extend-duration.component.html
-│   │   │   │   │   ├── extend-duration.component.spec.ts
-│   │   │   │   │   └── extend-duration.component.ts
-│   │   │   │   ├── home
-│   │   │   │   │   ├── home.component.css
-│   │   │   │   │   ├── home.component.html
-│   │   │   │   │   ├── home.component.spec.ts
-│   │   │   │   │   └── home.component.ts
-│   │   │   │   ├── navbar
-│   │   │   │   │   ├── navbar.component.css
-│   │   │   │   │   ├── navbar.component.html
-│   │   │   │   │   ├── navbar.component.spec.ts
-│   │   │   │   │   └── navbar.component.ts
-│   │   │   │   ├── payment
-│   │   │   │   │   ├── payment.component.css
-│   │   │   │   │   ├── payment.component.html
-│   │   │   │   │   ├── payment.component.spec.ts
-│   │   │   │   │   └── payment.component.ts
-│   │   │   │   └── verify
-│   │   │   │       ├── accounts
-│   │   │   │       │   ├── accounts.component.css
-│   │   │   │       │   ├── accounts.component.html
-│   │   │   │       │   ├── accounts.component.spec.ts
-│   │   │   │       │   └── accounts.component.ts
-│   │   │   │       ├── comments
-│   │   │   │       │   ├── verify-comments.component.css
-│   │   │   │       │   ├── verify-comments.component.html
-│   │   │   │       │   ├── verify-comments.component.spec.ts
-│   │   │   │       │   └── verify-comments.component.ts
-│   │   │   │       ├── posts
-│   │   │   │       │   ├── posts.component.css
-│   │   │   │       │   ├── posts.component.html
-│   │   │   │       │   ├── posts.component.spec.ts
-│   │   │   │       │   └── posts.component.ts
-│   │   │   │       └── reports
-│   │   │   │           ├── verify-report.component.css
-│   │   │   │           ├── verify-report.component.html
-│   │   │   │           ├── verify-report.component.spec.ts
-│   │   │   │           └── verify-report.component.ts
-│   │   │   ├── app.component.css
-│   │   │   ├── app.component.html
-│   │   │   ├── app.component.spec.ts
-│   │   │   ├── app.component.ts
-│   │   │   ├── app.module.ts
-│   │   │   ├── app-routing.module.ts
-│   │   │   ├── chat
-│   │   │   │   ├── chat.component.css
-│   │   │   │   ├── chat.component.html
-│   │   │   │   ├── chat.component.spec.ts
-│   │   │   │   └── chat.component.ts
-│   │   │   ├── comments
-│   │   │   │   ├── comments.component.css
-│   │   │   │   ├── comments.component.html
-│   │   │   │   ├── comments.component.spec.ts
-│   │   │   │   └── comments.component.ts
-│   │   │   ├── create-post
-│   │   │   │   ├── create-post.component.css
-│   │   │   │   ├── create-post.component.html
-│   │   │   │   ├── create-post.component.spec.ts
-│   │   │   │   └── create-post.component.ts
-│   │   │   ├── footer
-│   │   │   │   ├── footer.component.css
-│   │   │   │   ├── footer.component.html
-│   │   │   │   ├── footer.component.spec.ts
-│   │   │   │   └── footer.component.ts
-│   │   │   ├── _helpers
-│   │   │   │   ├── auth.guard.ts
-│   │   │   │   └── jwt.interceptor.ts
-│   │   │   ├── homepage
-│   │   │   │   ├── homepage.component.css
-│   │   │   │   ├── homepage.component.html
-│   │   │   │   ├── homepage.component.spec.ts
-│   │   │   │   └── homepage.component.ts
-│   │   │   ├── log-in
-│   │   │   │   ├── log-in.component.css
-│   │   │   │   ├── log-in.component.html
-│   │   │   │   ├── log-in.component.spec.ts
-│   │   │   │   └── log-in.component.ts
-│   │   │   ├── main-nav
-│   │   │   │   ├── main-nav.component.css
-│   │   │   │   ├── main-nav.component.html
-│   │   │   │   ├── main-nav.component.spec.ts
-│   │   │   │   └── main-nav.component.ts
-│   │   │   ├── _model
-│   │   │   │   ├── account.ts
-│   │   │   │   └── role.ts
-│   │   │   ├── not-found
-│   │   │   │   ├── not-found.component.css
-│   │   │   │   ├── not-found.component.html
-│   │   │   │   ├── not-found.component.spec.ts
-│   │   │   │   └── not-found.component.ts
-│   │   │   ├── post-details
-│   │   │   │   ├── post-details.component.css
-│   │   │   │   ├── post-details.component.html
-│   │   │   │   ├── post-details.component.spec.ts
-│   │   │   │   └── post-details.component.ts
-│   │   │   ├── posts
-│   │   │   │   ├── posts.component.css
-│   │   │   │   ├── posts.component.html
-│   │   │   │   ├── posts.component.spec.ts
-│   │   │   │   └── posts.component.ts
-│   │   │   ├── profile
-│   │   │   │   ├── profile.component.css
-│   │   │   │   ├── profile.component.html
-│   │   │   │   ├── profile.component.spec.ts
-│   │   │   │   └── profile.component.ts
-│   │   │   ├── register
-│   │   │   │   ├── register.component.css
-│   │   │   │   ├── register.component.html
-│   │   │   │   ├── register.component.spec.ts
-│   │   │   │   └── register.component.ts
-│   │   │   └── services
-│   │   │       ├── account.service.ts
-│   │   │       ├── auth.service.ts
-│   │   │       ├── comment.service.ts
-│   │   │       ├── favorite.service.spec.ts
-│   │   │       ├── favorite.service.ts
-│   │   │       ├── image.service.ts
-│   │   │       ├── messages.service.ts
-│   │   │       ├── post.service.ts
-│   │   │       └── report.service.ts
-│   │   ├── assets
-│   │   │   ├── avatar2.png
-│   │   │   ├── avatar.png
-│   │   │   ├── background3.jpg
-│   │   │   ├── background3-small.jpg
-│   │   │   ├── EA-Emblem.png
-│   │   │   ├── example.json
-│   │   │   ├── no_result.gif
-│   │   │   ├── room-logo.jpg
-│   │   │   └── uet.png
-│   │   ├── environments
-│   │   │   ├── environment.prod.ts
-│   │   │   └── environment.ts
-│   │   ├── favicon.ico
-│   │   ├── index.html
-│   │   ├── main.ts
-│   │   ├── polyfills.ts
-│   │   ├── styles.css
-│   │   └── test.ts
-│   ├── tsconfig.app.json
-│   ├── tsconfig.json
-│   ├── tsconfig.spec.json
-│   └── tslint.json
-├── ChatServer
-│   ├── config
-│   │   └── db.config.js
-│   ├── controllers
-│   │   └── message.controller.js
-│   ├── models
-│   │   ├── contactList.model.js
-│   │   ├── index.js
-│   │   └── messages.model.js
-│   ├── package.json
-│   ├── package-lock.json
-│   ├── routes
-│   │   └── message.routes.js
-│   └── server.js
-├── NodeJsServer
-│   ├── app
-│   │   ├── config
-│   │   │   ├── auth.config.js
-│   │   │   └── db.config.js
-│   │   ├── controllers
-│   │   │   ├── account.controller.js
-│   │   │   ├── auth.controller.js
-│   │   │   ├── comment.controller.js
-│   │   │   ├── notification.controller.js
-│   │   │   ├── post.controller.js
-│   │   │   ├── report-posts.controller.js
-│   │   │   ├── room.controller.js
-│   │   │   ├── user.controller.js
-│   │   │   └── userFavorite.controller.js
-│   │   ├── middleware
-│   │   │   └── authJwt.js
-│   │   ├── models
-│   │   │   ├── account.model.js
-│   │   │   ├── comments.model.js
-│   │   │   ├── index.js
-│   │   │   ├── notification.model.js
-│   │   │   ├── postCost.model.js
-│   │   │   ├── posts.model.js
-│   │   │   ├── reported-posts.model.js
-│   │   │   ├── rooms.model.js
-│   │   │   ├── userFavorite.model.js
-│   │   │   └── user.model.js
-│   │   └── routes
-│   │       ├── account.routes.js
-│   │       ├── comment.routes.js
-│   │       ├── notification.routes.js
-│   │       ├── post.routes.js
-│   │       ├── report.routes.js
-│   │       ├── room.routes.js
-│   │       ├── userFavorite.routes.js
-│   │       └── user.routes.js
-│   ├── package.json
-│   ├── package-lock.json
-│   ├── README.md
-│   ├── roomImages
-│   │   ├── 1
-│   │   │   ├── 3_2.jpg
-│   │   │   ├── 4_1.jpg
-│   │   │   └── 5_1.jpg
-│   │   ├── 2
-│   │   │   ├── image2.png
-│   │   │   └── image.png
-│   │   └── 3
-│   │       ├── 130816959_1836893276450003_637760412475408692_o.jpg
-│   │       ├── 1899348.jpg
-│   │       └── background.jpg
-│   └── server.js
-└── README.md
-
-48 directories, 186 files
+cd NodeJsServer
+cp .env.example .env
+# Edit .env with your database credentials and a strong JWT_SECRET
+npm install
+npm run migrate      # Run all database migrations
+npm run server       # Start with nodemon on port 8080
 ```
+
+**`.env` variables:**
+
+| Variable | Description | Default |
+|---|---|---|
+| `DB_HOST` | MySQL host | `localhost` |
+| `DB_USER` | MySQL username | — |
+| `DB_PASSWORD` | MySQL password | — |
+| `DB_NAME` | Database name | `easyaccomod` |
+| `JWT_SECRET` | Secret key for signing JWTs | — |
+| `CORS_ORIGIN` | Allowed frontend origin | `http://localhost:4200` |
+| `PORT` | Port to listen on | `8080` |
+
+### 3. Chat server (ChatServer)
+
+```bash
+cd ChatServer
+cp .env.example .env
+# Edit .env with the same database credentials
+npm install
+node server.js       # Start on port 3000
+```
+
+**`.env` variables:**
+
+| Variable | Description | Default |
+|---|---|---|
+| `DB_HOST` | MySQL host | `localhost` |
+| `DB_USER` | MySQL username | — |
+| `DB_PASSWORD` | MySQL password | — |
+| `DB_NAME` | Database name | `easyaccomod` |
+| `CORS_ORIGIN` | Allowed frontend origin | `http://localhost:4200` |
+
+### 4. Angular frontend (client)
+
+```bash
+cd client
+npm install          # or: bun install
+npm start            # Serves on http://localhost:4200
+```
+
+To change the backend URLs, edit `src/environments/environment.ts`:
+
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:8080',
+  chatApiUrl: 'http://localhost:3000'
+};
+```
+
+---
+
+## Running Tests
+
+```bash
+cd NodeJsServer
+npm test
+```
+
+Runs 18 Jest + Supertest tests covering authentication flows, account validation, and the validation middleware. The test suite mocks the database layer and runs without a live MySQL connection.
+
+---
+
+## Database Migrations
+
+Migrations are managed with `sequelize-cli`:
+
+```bash
+cd NodeJsServer
+
+# Apply all pending migrations
+npm run migrate
+
+# Roll back all migrations
+npm run migrate:undo
+```
+
+Migration files live in `NodeJsServer/app/migrations/` and create all tables in the correct foreign-key dependency order.
+
+---
+
+## API Overview
+
+The main API runs on `http://localhost:8080`. All routes are prefixed with `/api`.
+
+| Resource | Base path |
+|---|---|
+| Accounts | `/api/accounts` |
+| Posts | `/api/posts` |
+| Rooms | `/api/rooms` |
+| Comments | `/api/comments` |
+| Favorites | `/api/favorites` |
+| Notifications | `/api/notifications` |
+| Reports | `/api/reports` |
+| Statistics | `/api/statistics` |
+| Extend requests | `/api/extend` |
+| Users | `/api/users` |
+| CSRF token | `/api/csrf-token` |
+
+The chat server runs on `http://localhost:3000` and exposes `/api/message` over HTTP and real-time events over Socket.io.
+
+### Authentication
+
+Login (`POST /api/accounts/login`) sets an `httpOnly; SameSite=Strict` cookie containing the JWT. The cookie is sent automatically with every subsequent request. Logout (`POST /api/accounts/logout`) clears the cookie server-side.
+
+Protected routes require a valid token cookie. The CSRF double-submit pattern protects all state-changing endpoints: the client fetches a CSRF token from `GET /api/csrf-token` on startup and includes it as an `x-csrf-token` header.
+
+---
+
+## Security
+
+- **Helmet.js** — HTTP security headers on both servers
+- **CORS** — restricted to the configured `CORS_ORIGIN`
+- **JWT in httpOnly cookie** — not accessible from JavaScript
+- **CSRF protection** — signed double-submit cookie via `csrf-csrf`
+- **Rate limiting** — login: 10 attempts / 15 min; signup: 5 accounts / hour
+- **Input validation** — `express-validator` on account, comment, and post endpoints
+- **Password hashing** — bcrypt (cost factor 10) on the server
+- **Path traversal prevention** — upload paths are validated and resolved against a base directory
+- **SQL injection prevention** — parameterized queries via Sequelize ORM
